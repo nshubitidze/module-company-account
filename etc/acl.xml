@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Shubo_CompanyAccount::company" title="Shubo B2B Companies" sortOrder="30">
+                    <resource id="Shubo_CompanyAccount::company_manage" title="Manage Companies" sortOrder="10"/>
+                    <resource id="Shubo_CompanyAccount::company_approve" title="Approve/Reject Companies" sortOrder="20"/>
+                    <resource id="Shubo_CompanyAccount::company_delete" title="Delete Companies" sortOrder="30"/>
+                </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Shubo_CompanyAccount::config" title="Shubo Company Account Configuration" sortOrder="100"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

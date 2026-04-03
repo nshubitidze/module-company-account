@@ -1,0 +1,276 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Shubo_CompanyAccount - Declarative Database Schema
+ *
+ * Tables:
+ *   shubo_company          - Company entities
+ *   shubo_company_address  - Company addresses
+ *   shubo_company_team     - Teams/divisions within a company
+ *   shubo_company_role     - Custom roles with permissions
+ *   shubo_company_user     - Links customers to companies with role assignment
+ *   shubo_company_role_permission - Role-permission mappings
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+
+    <!-- ==================== COMPANY ==================== -->
+    <table name="shubo_company" resource="default" engine="innodb"
+           comment="Shubo B2B Company Entities">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Company ID"/>
+        <column xsi:type="varchar" name="company_name" nullable="false" length="255"
+                comment="Company Name"/>
+        <column xsi:type="varchar" name="legal_name" nullable="true" length="255"
+                comment="Legal/Registered Name"/>
+        <column xsi:type="varchar" name="company_email" nullable="false" length="255"
+                comment="Company Email"/>
+        <column xsi:type="varchar" name="vat_tax_id" nullable="true" length="64"
+                comment="VAT/Tax ID"/>
+        <column xsi:type="varchar" name="reseller_id" nullable="true" length="64"
+                comment="Reseller ID"/>
+        <column xsi:type="varchar" name="phone" nullable="true" length="32"
+                comment="Phone Number"/>
+        <column xsi:type="varchar" name="website" nullable="true" length="255"
+                comment="Company Website URL"/>
+        <column xsi:type="text" name="comment" nullable="true"
+                comment="Admin Comment / Notes"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" default="0"
+                comment="Status: 0=Pending, 1=Approved, 2=Rejected, 3=Blocked"/>
+        <column xsi:type="varchar" name="reject_reason" nullable="true" length="1024"
+                comment="Rejection Reason"/>
+        <column xsi:type="int" name="admin_customer_id" unsigned="true" nullable="true"
+                comment="Company Admin Customer ID"/>
+        <column xsi:type="int" name="sales_representative_id" unsigned="true" nullable="true"
+                comment="Assigned Sales Rep Admin User ID"/>
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="true" default="0"
+                comment="Parent Company ID (for hierarchy)"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" default="0"
+                comment="Store View ID where company registered"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP"
+                on_update="true" comment="Updated At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SHUBO_COMPANY_ADMIN_CUSTOMER"
+                    table="shubo_company" column="admin_customer_id"
+                    referenceTable="customer_entity" referenceColumn="entity_id"
+                    onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="SHUBO_COMPANY_PARENT"
+                    table="shubo_company" column="parent_id"
+                    referenceTable="shubo_company" referenceColumn="entity_id"
+                    onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="SHUBO_COMPANY_STORE"
+                    table="shubo_company" column="store_id"
+                    referenceTable="store" referenceColumn="store_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SHUBO_COMPANY_EMAIL_UNIQUE">
+            <column name="company_email"/>
+        </constraint>
+        <index referenceId="SHUBO_COMPANY_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+        <index referenceId="SHUBO_COMPANY_ADMIN_CUSTOMER" indexType="btree">
+            <column name="admin_customer_id"/>
+        </index>
+        <index referenceId="SHUBO_COMPANY_NAME" indexType="fulltext">
+            <column name="company_name"/>
+        </index>
+    </table>
+
+    <!-- ==================== COMPANY ADDRESS ==================== -->
+    <table name="shubo_company_address" resource="default" engine="innodb"
+           comment="Company Addresses">
+        <column xsi:type="int" name="address_id" unsigned="true" nullable="false" identity="true"
+                comment="Address ID"/>
+        <column xsi:type="int" name="company_id" unsigned="true" nullable="false"
+                comment="Company ID"/>
+        <column xsi:type="varchar" name="type" nullable="false" length="32" default="billing"
+                comment="Address Type: billing, shipping, headquarters"/>
+        <column xsi:type="varchar" name="street_line1" nullable="false" length="255"
+                comment="Street Line 1"/>
+        <column xsi:type="varchar" name="street_line2" nullable="true" length="255"
+                comment="Street Line 2"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="255"
+                comment="City"/>
+        <column xsi:type="varchar" name="region" nullable="true" length="255"
+                comment="Region/State"/>
+        <column xsi:type="int" name="region_id" unsigned="true" nullable="true"
+                comment="Region ID"/>
+        <column xsi:type="varchar" name="postcode" nullable="false" length="32"
+                comment="Postal Code"/>
+        <column xsi:type="varchar" name="country_id" nullable="false" length="2"
+                comment="Country ISO Code"/>
+        <column xsi:type="varchar" name="telephone" nullable="true" length="32"
+                comment="Telephone"/>
+        <column xsi:type="boolean" name="is_default" nullable="false" default="false"
+                comment="Is Default Address"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="address_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SHUBO_COMPANY_ADDR_COMPANY"
+                    table="shubo_company_address" column="company_id"
+                    referenceTable="shubo_company" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="SHUBO_COMPANY_ADDR_COMPANY_ID" indexType="btree">
+            <column name="company_id"/>
+        </index>
+    </table>
+
+    <!-- ==================== COMPANY TEAM ==================== -->
+    <table name="shubo_company_team" resource="default" engine="innodb"
+           comment="Company Teams/Divisions">
+        <column xsi:type="int" name="team_id" unsigned="true" nullable="false" identity="true"
+                comment="Team ID"/>
+        <column xsi:type="int" name="company_id" unsigned="true" nullable="false"
+                comment="Company ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255"
+                comment="Team Name"/>
+        <column xsi:type="text" name="description" nullable="true"
+                comment="Team Description"/>
+        <column xsi:type="int" name="parent_team_id" unsigned="true" nullable="true"
+                comment="Parent Team ID (for nested hierarchy)"/>
+        <column xsi:type="int" name="sort_order" unsigned="true" nullable="false" default="0"
+                comment="Sort Order"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="team_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SHUBO_TEAM_COMPANY"
+                    table="shubo_company_team" column="company_id"
+                    referenceTable="shubo_company" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SHUBO_TEAM_PARENT"
+                    table="shubo_company_team" column="parent_team_id"
+                    referenceTable="shubo_company_team" referenceColumn="team_id"
+                    onDelete="SET NULL"/>
+        <index referenceId="SHUBO_TEAM_COMPANY_ID" indexType="btree">
+            <column name="company_id"/>
+        </index>
+    </table>
+
+    <!-- ==================== COMPANY ROLE ==================== -->
+    <table name="shubo_company_role" resource="default" engine="innodb"
+           comment="Company Roles">
+        <column xsi:type="int" name="role_id" unsigned="true" nullable="false" identity="true"
+                comment="Role ID"/>
+        <column xsi:type="int" name="company_id" unsigned="true" nullable="false"
+                comment="Company ID"/>
+        <column xsi:type="varchar" name="role_name" nullable="false" length="255"
+                comment="Role Name"/>
+        <column xsi:type="text" name="description" nullable="true"
+                comment="Role Description"/>
+        <column xsi:type="boolean" name="is_default" nullable="false" default="false"
+                comment="Is Default Role for New Users"/>
+        <column xsi:type="int" name="sort_order" unsigned="true" nullable="false" default="0"
+                comment="Sort Order"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="role_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SHUBO_ROLE_COMPANY"
+                    table="shubo_company_role" column="company_id"
+                    referenceTable="shubo_company" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="SHUBO_ROLE_COMPANY_ID" indexType="btree">
+            <column name="company_id"/>
+        </index>
+    </table>
+
+    <!-- ==================== COMPANY ROLE PERMISSIONS ==================== -->
+    <table name="shubo_company_role_permission" resource="default" engine="innodb"
+           comment="Role-Permission Mappings">
+        <column xsi:type="int" name="permission_id" unsigned="true" nullable="false" identity="true"
+                comment="Permission ID"/>
+        <column xsi:type="int" name="role_id" unsigned="true" nullable="false"
+                comment="Role ID"/>
+        <column xsi:type="varchar" name="resource_id" nullable="false" length="255"
+                comment="Permission Resource Identifier (e.g., Shubo_CompanyAccount::manage_users)"/>
+        <column xsi:type="boolean" name="is_allowed" nullable="false" default="true"
+                comment="Is Allowed"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="permission_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SHUBO_ROLE_PERM_ROLE"
+                    table="shubo_company_role_permission" column="role_id"
+                    referenceTable="shubo_company_role" referenceColumn="role_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SHUBO_ROLE_PERM_UNIQUE">
+            <column name="role_id"/>
+            <column name="resource_id"/>
+        </constraint>
+        <index referenceId="SHUBO_ROLE_PERM_ROLE_ID" indexType="btree">
+            <column name="role_id"/>
+        </index>
+    </table>
+
+    <!-- ==================== COMPANY USER (Links customer to company) ==================== -->
+    <table name="shubo_company_user" resource="default" engine="innodb"
+           comment="Company User Assignments (Customer-Company Link)">
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" identity="true"
+                comment="User Assignment ID"/>
+        <column xsi:type="int" name="company_id" unsigned="true" nullable="false"
+                comment="Company ID"/>
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="false"
+                comment="Magento Customer ID"/>
+        <column xsi:type="int" name="role_id" unsigned="true" nullable="true"
+                comment="Assigned Role ID"/>
+        <column xsi:type="int" name="team_id" unsigned="true" nullable="true"
+                comment="Assigned Team ID"/>
+        <column xsi:type="varchar" name="job_title" nullable="true" length="255"
+                comment="Job Title"/>
+        <column xsi:type="varchar" name="phone" nullable="true" length="32"
+                comment="Direct Phone"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" default="1"
+                comment="Status: 0=Inactive, 1=Active"/>
+        <column xsi:type="boolean" name="is_company_admin" nullable="false" default="false"
+                comment="Is Company Administrator"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP"
+                on_update="true" comment="Updated At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="user_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SHUBO_COMP_USER_COMPANY"
+                    table="shubo_company_user" column="company_id"
+                    referenceTable="shubo_company" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SHUBO_COMP_USER_CUSTOMER"
+                    table="shubo_company_user" column="customer_id"
+                    referenceTable="customer_entity" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SHUBO_COMP_USER_ROLE"
+                    table="shubo_company_user" column="role_id"
+                    referenceTable="shubo_company_role" referenceColumn="role_id"
+                    onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="SHUBO_COMP_USER_TEAM"
+                    table="shubo_company_user" column="team_id"
+                    referenceTable="shubo_company_team" referenceColumn="team_id"
+                    onDelete="SET NULL"/>
+        <constraint xsi:type="unique" referenceId="SHUBO_COMP_USER_CUSTOMER_UNIQUE">
+            <column name="customer_id"/>
+        </constraint>
+        <index referenceId="SHUBO_COMP_USER_COMPANY_ID" indexType="btree">
+            <column name="company_id"/>
+        </index>
+        <index referenceId="SHUBO_COMP_USER_ROLE_ID" indexType="btree">
+            <column name="role_id"/>
+        </index>
+        <index referenceId="SHUBO_COMP_USER_TEAM_ID" indexType="btree">
+            <column name="team_id"/>
+        </index>
+    </table>
+
+</schema>

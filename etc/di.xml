@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Data Interface Preferences -->
+    <preference for="Shubo\CompanyAccount\Api\Data\CompanyInterface"
+                type="Shubo\CompanyAccount\Model\Company"/>
+
+    <!-- Repository Preferences -->
+    <preference for="Shubo\CompanyAccount\Api\CompanyRepositoryInterface"
+                type="Shubo\CompanyAccount\Model\CompanyRepository"/>
+
+    <!-- Management Preferences -->
+    <preference for="Shubo\CompanyAccount\Api\CompanyManagementInterface"
+                type="Shubo\CompanyAccount\Model\CompanyManagement"/>
+
+</config>
