@@ -1,0 +1,82 @@
+<?php
+/**
+ * Company Dashboard - Hyva-native with Alpine.js
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Shubo\CompanyAccount\ViewModel\CompanyDashboard $viewModel
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$viewModel = $block->getData('view_model');
+$company = $viewModel->getCompany();
+?>
+
+<?php if ($company): ?>
+<div class="container mx-auto px-4 py-6" x-data>
+
+    <h1 class="text-2xl font-bold mb-6"><?= $escaper->escapeHtml(__('Company Dashboard')) ?></h1>
+
+    <!-- Company Info Card -->
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <div class="flex justify-between items-start">
+            <div>
+                <h2 class="text-xl font-semibold"><?= $escaper->escapeHtml($company->getCompanyName()) ?></h2>
+                <?php if ($company->getLegalName()): ?>
+                    <p class="text-gray-500 text-sm"><?= $escaper->escapeHtml($company->getLegalName()) ?></p>
+                <?php endif; ?>
+                <p class="text-gray-600 mt-1"><?= $escaper->escapeHtml($company->getCompanyEmail()) ?></p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-sm font-medium
+                <?php switch ($company->getStatus()):
+                    case 0: ?> bg-yellow-100 text-yellow-800 <?php break;
+                    case 1: ?> bg-green-100 text-green-800 <?php break;
+                    case 2: ?> bg-red-100 text-red-800 <?php break;
+                    case 3: ?> bg-gray-100 text-gray-800 <?php break;
+                endswitch; ?>">
+                <?= $escaper->escapeHtml($viewModel->getStatusLabel()) ?>
+            </span>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow p-4">
+            <p class="text-gray-500 text-sm"><?= $escaper->escapeHtml(__('Team Members')) ?></p>
+            <p class="text-2xl font-bold"><?= (int) $viewModel->getUserCount() ?></p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <p class="text-gray-500 text-sm"><?= $escaper->escapeHtml(__('Status')) ?></p>
+            <p class="text-2xl font-bold"><?= $escaper->escapeHtml($viewModel->getStatusLabel()) ?></p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <p class="text-gray-500 text-sm"><?= $escaper->escapeHtml(__('Company ID')) ?></p>
+            <p class="text-2xl font-bold">#<?= (int) $company->getEntityId() ?></p>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <?php if ($company->getStatus() === 1): ?>
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-4"><?= $escaper->escapeHtml(__('Quick Actions')) ?></h3>
+        <div class="flex flex-wrap gap-3">
+            <a href="<?= $escaper->escapeUrl($block->getUrl('company/account/users')) ?>"
+               class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+                <?= $escaper->escapeHtml(__('Manage Users')) ?>
+            </a>
+            <a href="<?= $escaper->escapeUrl($block->getUrl('company/account/roles')) ?>"
+               class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm">
+                <?= $escaper->escapeHtml(__('Manage Roles')) ?>
+            </a>
+            <a href="<?= $escaper->escapeUrl($block->getUrl('company/account/teams')) ?>"
+               class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm">
+                <?= $escaper->escapeHtml(__('Manage Teams')) ?>
+            </a>
+            <a href="<?= $escaper->escapeUrl($block->getUrl('company/account/profile')) ?>"
+               class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm">
+                <?= $escaper->escapeHtml(__('Company Profile')) ?>
+            </a>
+        </div>
+    </div>
+    <?php endif; ?>
+
+</div>
+<?php endif; ?>

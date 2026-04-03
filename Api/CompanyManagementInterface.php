@@ -8,6 +8,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Shubo\CompanyAccount\Api\Data\CompanyInterface;
+use Shubo\CompanyAccount\Api\Data\CompanyUserInterface;
 
 /**
  * High-level company management operations.
@@ -57,6 +58,23 @@ interface CompanyManagementInterface
      * @throws LocalizedException
      */
     public function reject(int $companyId, string $reason): CompanyInterface;
+
+    /**
+     * Invite a user to the company.
+     *
+     * Creates customer account if not exists, creates company_user link.
+     * Sends invitation email.
+     *
+     * @param int $companyId
+     * @param mixed[] $userData User fields (firstname, lastname, email, job_title, phone)
+     * @param int|null $roleId
+     * @param int|null $teamId
+     * @return CompanyUserInterface
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws LocalizedException
+     */
+    public function inviteUser(int $companyId, array $userData, ?int $roleId = null, ?int $teamId = null): CompanyUserInterface;
 
     /**
      * Block an active company.

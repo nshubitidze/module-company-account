@@ -1,0 +1,27 @@
+<!--@subject Your Company Has Been Approved @-->
+<!--@vars
+{"var company_name":"Company Name","var admin_name":"Admin Name","var store_url":"Store URL"}
+@-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "Dear %name," name=$admin_name}}</p>
+            <p>
+                {{trans "Great news! Your company <strong>%company_name</strong> has been <strong>approved</strong>." company_name=$company_name}}
+            </p>
+            <p>
+                {{trans "You can now log in to your account and start managing your company, invite team members, and place orders on behalf of your organization."}}
+            </p>
+            <p>
+                <a href="{{var store_url}}customer/account/login" style="text-decoration: none;">
+                    {{trans "Log In to Your Account"}}
+                </a>
+            </p>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

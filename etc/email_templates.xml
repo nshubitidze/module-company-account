@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+
+    <template id="shubo_company_registration_pending"
+              label="Company Registration - Pending Approval"
+              file="Shubo_CompanyAccount/company_registration_pending.html"
+              type="html" module="Shubo_CompanyAccount" area="frontend"/>
+
+    <template id="shubo_company_approved"
+              label="Company Approved"
+              file="Shubo_CompanyAccount/company_approved.html"
+              type="html" module="Shubo_CompanyAccount" area="frontend"/>
+
+    <template id="shubo_company_rejected"
+              label="Company Rejected"
+              file="Shubo_CompanyAccount/company_rejected.html"
+              type="html" module="Shubo_CompanyAccount" area="frontend"/>
+
+    <template id="shubo_company_user_invited"
+              label="Company User Invitation"
+              file="Shubo_CompanyAccount/company_user_invited.html"
+              type="html" module="Shubo_CompanyAccount" area="frontend"/>
+
+    <template id="shubo_company_admin_new_registration"
+              label="Admin - New Company Registration"
+              file="Shubo_CompanyAccount/company_admin_new_registration.html"
+              type="html" module="Shubo_CompanyAccount" area="adminhtml"/>
+
+</config>

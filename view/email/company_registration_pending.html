@@ -1,0 +1,25 @@
+<!--@subject Company Registration Received @-->
+<!--@vars
+{"var company_name":"Company Name","var admin_name":"Admin Name"}
+@-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "Dear %name," name=$admin_name}}</p>
+            <p>
+                {{trans "Thank you for registering <strong>%company_name</strong> on our platform." company_name=$company_name}}
+            </p>
+            <p>
+                {{trans "Your company registration is currently <strong>pending approval</strong>. Our team will review your application and you will receive a notification once it has been processed."}}
+            </p>
+            <p>
+                {{trans "This usually takes 1-2 business days."}}
+            </p>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

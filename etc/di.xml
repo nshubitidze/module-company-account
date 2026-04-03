@@ -5,10 +5,28 @@
     <!-- Data Interface Preferences -->
     <preference for="Shubo\CompanyAccount\Api\Data\CompanyInterface"
                 type="Shubo\CompanyAccount\Model\Company"/>
+    <preference for="Shubo\CompanyAccount\Api\Data\CompanyAddressInterface"
+                type="Shubo\CompanyAccount\Model\CompanyAddress"/>
+    <preference for="Shubo\CompanyAccount\Api\Data\CompanyTeamInterface"
+                type="Shubo\CompanyAccount\Model\CompanyTeam"/>
+    <preference for="Shubo\CompanyAccount\Api\Data\CompanyRoleInterface"
+                type="Shubo\CompanyAccount\Model\CompanyRole"/>
+    <preference for="Shubo\CompanyAccount\Api\Data\CompanyUserInterface"
+                type="Shubo\CompanyAccount\Model\CompanyUser"/>
+    <preference for="Shubo\CompanyAccount\Api\Data\CompanySearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults"/>
 
     <!-- Repository Preferences -->
     <preference for="Shubo\CompanyAccount\Api\CompanyRepositoryInterface"
                 type="Shubo\CompanyAccount\Model\CompanyRepository"/>
+    <preference for="Shubo\CompanyAccount\Api\CompanyAddressRepositoryInterface"
+                type="Shubo\CompanyAccount\Model\CompanyAddressRepository"/>
+    <preference for="Shubo\CompanyAccount\Api\CompanyTeamRepositoryInterface"
+                type="Shubo\CompanyAccount\Model\CompanyTeamRepository"/>
+    <preference for="Shubo\CompanyAccount\Api\CompanyRoleRepositoryInterface"
+                type="Shubo\CompanyAccount\Model\CompanyRoleRepository"/>
+    <preference for="Shubo\CompanyAccount\Api\CompanyUserRepositoryInterface"
+                type="Shubo\CompanyAccount\Model\CompanyUserRepository"/>
 
     <!-- Management Preferences -->
     <preference for="Shubo\CompanyAccount\Api\CompanyManagementInterface"

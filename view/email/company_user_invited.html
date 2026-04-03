@@ -1,0 +1,27 @@
+<!--@subject You've Been Invited to Join a Company @-->
+<!--@vars
+{"var company_name":"Company Name","var user_name":"User Name","var store_url":"Store URL"}
+@-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "Dear %name," name=$user_name}}</p>
+            <p>
+                {{trans "You have been invited to join <strong>%company_name</strong> on our platform." company_name=$company_name}}
+            </p>
+            <p>
+                {{trans "As a company member, you will be able to place orders, access shared resources, and collaborate with your team."}}
+            </p>
+            <p>
+                <a href="{{var store_url}}customer/account/login" style="text-decoration: none;">
+                    {{trans "Log In to Get Started"}}
+                </a>
+            </p>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

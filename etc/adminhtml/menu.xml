@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Shubo_CompanyAccount::shubo"
+             title="Shubo"
+             module="Shubo_CompanyAccount"
+             sortOrder="50"
+             resource="Shubo_CompanyAccount::company"/>
+
+        <add id="Shubo_CompanyAccount::company"
+             title="B2B Companies"
+             module="Shubo_CompanyAccount"
+             sortOrder="10"
+             parent="Shubo_CompanyAccount::shubo"
+             action="shubo_company/company"
+             resource="Shubo_CompanyAccount::company_manage"/>
+    </menu>
+</config>

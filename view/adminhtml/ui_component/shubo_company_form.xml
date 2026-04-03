@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">shubo_company_form.shubo_company_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Company Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+
+    <settings>
+        <buttons>
+            <button name="back" class="Magento\Cms\Block\Adminhtml\Page\Edit\BackButton"/>
+            <button name="delete" class="Shubo\CompanyAccount\Block\Adminhtml\Company\Edit\DeleteButton"/>
+            <button name="save" class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveButton"/>
+            <button name="save_and_continue"
+                    class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton"/>
+        </buttons>
+        <namespace>shubo_company_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>shubo_company_form.shubo_company_form_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="shubo_company_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <requestFieldName>entity_id</requestFieldName>
+            <primaryFieldName>entity_id</primaryFieldName>
+        </settings>
+        <dataProvider class="Shubo\CompanyAccount\Ui\Component\Form\DataProvider\CompanyDataProvider"
+                      name="shubo_company_form_data_source">
+            <settings>
+                <requestFieldName>entity_id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <fieldset name="general" sortOrder="10">
+        <settings>
+            <collapsible>false</collapsible>
+            <label translate="true">General Information</label>
+        </settings>
+
+        <field name="entity_id" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>
+
+        <field name="company_name" formElement="input" sortOrder="10">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Company Name</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="legal_name" formElement="input" sortOrder="20">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Legal Name</label>
+            </settings>
+        </field>
+
+        <field name="company_email" formElement="input" sortOrder="30">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Company Email</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-email" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="vat_tax_id" formElement="input" sortOrder="40">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">VAT/Tax ID</label>
+            </settings>
+        </field>
+
+        <field name="reseller_id" formElement="input" sortOrder="50">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Reseller ID</label>
+            </settings>
+        </field>
+
+        <field name="phone" formElement="input" sortOrder="60">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Phone</label>
+            </settings>
+        </field>
+
+        <field name="website" formElement="input" sortOrder="70">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Website</label>
+                <validation>
+                    <rule name="validate-url" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+
+        <field name="status" formElement="select" sortOrder="80">
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">Status</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Shubo\CompanyAccount\Model\Config\Source\CompanyStatus"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <field name="comment" formElement="textarea" sortOrder="90">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Admin Notes</label>
+            </settings>
+        </field>
+
+        <field name="reject_reason" formElement="textarea" sortOrder="100">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Rejection Reason</label>
+            </settings>
+        </field>
+    </fieldset>
+</form>

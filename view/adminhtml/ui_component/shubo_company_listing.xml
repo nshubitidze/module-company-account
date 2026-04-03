@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">shubo_company_listing.shubo_company_listing_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/edit"/>
+                <class>primary</class>
+                <label translate="true">Add New Company</label>
+            </button>
+        </buttons>
+        <spinner>shubo_company_columns</spinner>
+        <deps>
+            <dep>shubo_company_listing.shubo_company_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="shubo_company_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <requestFieldName>entity_id</requestFieldName>
+            <primaryFieldName>entity_id</primaryFieldName>
+        </settings>
+        <aclResource>Shubo_CompanyAccount::company_manage</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="shubo_company_listing_data_source">
+            <settings>
+                <requestFieldName>entity_id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters"/>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="approve">
+                <settings>
+                    <url path="shubo_company/company/massAction/action/approve"/>
+                    <type>approve</type>
+                    <label translate="true">Approve</label>
+                    <confirm>
+                        <message translate="true">Approve selected companies?</message>
+                        <title translate="true">Approve</title>
+                    </confirm>
+                </settings>
+            </action>
+            <action name="reject">
+                <settings>
+                    <url path="shubo_company/company/massAction/action/reject"/>
+                    <type>reject</type>
+                    <label translate="true">Reject</label>
+                    <confirm>
+                        <message translate="true">Reject selected companies?</message>
+                        <title translate="true">Reject</title>
+                    </confirm>
+                </settings>
+            </action>
+            <action name="delete">
+                <settings>
+                    <url path="shubo_company/company/massAction/action/delete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                    <confirm>
+                        <message translate="true">Delete selected companies? This action cannot be undone.</message>
+                        <title translate="true">Delete</title>
+                    </confirm>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+
+    <columns name="shubo_company_columns">
+        <selectionsColumn name="ids" sortOrder="10">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </selectionsColumn>
+
+        <column name="entity_id" sortOrder="20">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+
+        <column name="company_name" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Company Name</label>
+            </settings>
+        </column>
+
+        <column name="company_email" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Email</label>
+            </settings>
+        </column>
+
+        <column name="phone" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Phone</label>
+            </settings>
+        </column>
+
+        <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="60">
+            <settings>
+                <filter>select</filter>
+                <options class="Shubo\CompanyAccount\Model\Config\Source\CompanyStatus"/>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="70">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Created</label>
+            </settings>
+        </column>
+
+        <actionsColumn name="actions" class="Shubo\CompanyAccount\Ui\Component\Listing\Column\CompanyActions"
+                       sortOrder="200">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

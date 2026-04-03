@@ -1,0 +1,349 @@
+<?php
+/**
+ * Company Registration Form - Hyva-native with Alpine.js
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Shubo\CompanyAccount\ViewModel\CompanyRegistration $viewModel
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$viewModel = $block->getData('view_model');
+?>
+
+<div class="container mx-auto max-w-2xl px-4 py-8"
+     x-data="companyRegistration()"
+     x-cloak>
+
+    <h1 class="text-2xl font-bold mb-6"><?= $escaper->escapeHtml(__('Register Your Company')) ?></h1>
+
+    <form action="<?= $escaper->escapeUrl($block->getUrl('company/account/registerPost')) ?>"
+          method="post"
+          id="company-registration-form"
+          @submit="submitForm($event)">
+
+        <?= $block->getBlockHtml('formkey') ?>
+
+        <!-- Step Indicators -->
+        <div class="flex mb-8">
+            <template x-for="(label, index) in steps" :key="index">
+                <div class="flex-1 text-center">
+                    <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-sm font-bold"
+                         :class="step > index ? 'bg-green-500 text-white' : (step === index ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500')">
+                        <span x-text="index + 1"></span>
+                    </div>
+                    <div class="text-xs mt-1" x-text="label"></div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Step 1: Company Details -->
+        <div x-show="step === 0" class="space-y-4">
+            <h2 class="text-lg font-semibold mb-4"><?= $escaper->escapeHtml(__('Company Details')) ?></h2>
+
+            <div>
+                <label for="company_name" class="block text-sm font-medium mb-1">
+                    <?= $escaper->escapeHtml(__('Company Name')) ?> <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="company_name" id="company_name" required
+                       x-model="formData.company_name"
+                       class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label for="company_email" class="block text-sm font-medium mb-1">
+                    <?= $escaper->escapeHtml(__('Company Email')) ?> <span class="text-red-500">*</span>
+                </label>
+                <input type="email" name="company_email" id="company_email" required
+                       x-model="formData.company_email"
+                       class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="legal_name" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('Legal Name')) ?>
+                    </label>
+                    <input type="text" name="legal_name" id="legal_name"
+                           x-model="formData.legal_name"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="vat_tax_id" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('VAT/Tax ID')) ?>
+                    </label>
+                    <input type="text" name="vat_tax_id" id="vat_tax_id"
+                           x-model="formData.vat_tax_id"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="phone" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('Phone')) ?>
+                    </label>
+                    <input type="tel" name="phone" id="phone"
+                           x-model="formData.phone"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="website" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('Website')) ?>
+                    </label>
+                    <input type="url" name="website" id="website"
+                           x-model="formData.website"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Address -->
+        <div x-show="step === 1" class="space-y-4">
+            <h2 class="text-lg font-semibold mb-4"><?= $escaper->escapeHtml(__('Company Address')) ?></h2>
+
+            <div>
+                <label for="street_line1" class="block text-sm font-medium mb-1">
+                    <?= $escaper->escapeHtml(__('Street Address')) ?> <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="street_line1" id="street_line1" required
+                       x-model="formData.street_line1"
+                       class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" name="street_line2" id="street_line2"
+                       x-model="formData.street_line2"
+                       placeholder="<?= $escaper->escapeHtmlAttr(__('Line 2 (optional)')) ?>"
+                       class="w-full border rounded px-3 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="city" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('City')) ?> <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="city" id="city" required
+                           x-model="formData.city"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="postcode" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('Postal Code')) ?> <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="postcode" id="postcode" required
+                           x-model="formData.postcode"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="country_id" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('Country')) ?> <span class="text-red-500">*</span>
+                    </label>
+                    <select name="country_id" id="country_id" required
+                            x-model="formData.country_id"
+                            @change="updateRegions()"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value=""><?= $escaper->escapeHtml(__('Select Country')) ?></option>
+                        <?php foreach ($viewModel->getCountries() as $country): ?>
+                            <option value="<?= $escaper->escapeHtmlAttr($country['value']) ?>">
+                                <?= $escaper->escapeHtml($country['label']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="region" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('State/Region')) ?>
+                    </label>
+                    <template x-if="availableRegions.length > 0">
+                        <select name="region_id" id="region_id"
+                                x-model="formData.region_id"
+                                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value=""><?= $escaper->escapeHtml(__('Select Region')) ?></option>
+                            <template x-for="region in availableRegions" :key="region.value">
+                                <option :value="region.value" x-text="region.label"></option>
+                            </template>
+                        </select>
+                    </template>
+                    <template x-if="availableRegions.length === 0">
+                        <input type="text" name="region" id="region"
+                               x-model="formData.region"
+                               class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Admin Account -->
+        <div x-show="step === 2" class="space-y-4">
+            <h2 class="text-lg font-semibold mb-4"><?= $escaper->escapeHtml(__('Company Administrator Account')) ?></h2>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="admin_firstname" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('First Name')) ?> <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="admin_firstname" id="admin_firstname" required
+                           x-model="formData.admin_firstname"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="admin_lastname" class="block text-sm font-medium mb-1">
+                        <?= $escaper->escapeHtml(__('Last Name')) ?> <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="admin_lastname" id="admin_lastname" required
+                           x-model="formData.admin_lastname"
+                           class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <div>
+                <label for="admin_email" class="block text-sm font-medium mb-1">
+                    <?= $escaper->escapeHtml(__('Email')) ?> <span class="text-red-500">*</span>
+                </label>
+                <input type="email" name="admin_email" id="admin_email" required
+                       x-model="formData.admin_email"
+                       class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label for="admin_password" class="block text-sm font-medium mb-1">
+                    <?= $escaper->escapeHtml(__('Password')) ?> <span class="text-red-500">*</span>
+                </label>
+                <input type="password" name="admin_password" id="admin_password" required
+                       x-model="formData.admin_password"
+                       minlength="8"
+                       class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p class="text-xs text-gray-500 mt-1"><?= $escaper->escapeHtml(__('Minimum 8 characters')) ?></p>
+            </div>
+
+            <div>
+                <label for="admin_password_confirm" class="block text-sm font-medium mb-1">
+                    <?= $escaper->escapeHtml(__('Confirm Password')) ?> <span class="text-red-500">*</span>
+                </label>
+                <input type="password" id="admin_password_confirm" required
+                       x-model="formData.admin_password_confirm"
+                       class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p x-show="formData.admin_password && formData.admin_password_confirm && formData.admin_password !== formData.admin_password_confirm"
+                   class="text-red-500 text-xs mt-1"><?= $escaper->escapeHtml(__('Passwords do not match')) ?></p>
+            </div>
+        </div>
+
+        <!-- Step 4: Review -->
+        <div x-show="step === 3" class="space-y-4">
+            <h2 class="text-lg font-semibold mb-4"><?= $escaper->escapeHtml(__('Review & Submit')) ?></h2>
+
+            <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                <h3 class="font-medium"><?= $escaper->escapeHtml(__('Company')) ?></h3>
+                <p><span class="text-gray-500"><?= $escaper->escapeHtml(__('Name:')) ?></span> <span x-text="formData.company_name"></span></p>
+                <p><span class="text-gray-500"><?= $escaper->escapeHtml(__('Email:')) ?></span> <span x-text="formData.company_email"></span></p>
+                <p x-show="formData.phone"><span class="text-gray-500"><?= $escaper->escapeHtml(__('Phone:')) ?></span> <span x-text="formData.phone"></span></p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                <h3 class="font-medium"><?= $escaper->escapeHtml(__('Address')) ?></h3>
+                <p x-text="formData.street_line1"></p>
+                <p x-show="formData.street_line2" x-text="formData.street_line2"></p>
+                <p><span x-text="formData.city"></span>, <span x-text="formData.postcode"></span></p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                <h3 class="font-medium"><?= $escaper->escapeHtml(__('Administrator')) ?></h3>
+                <p><span x-text="formData.admin_firstname"></span> <span x-text="formData.admin_lastname"></span></p>
+                <p x-text="formData.admin_email"></p>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between mt-8">
+            <button type="button"
+                    x-show="step > 0"
+                    @click="step--"
+                    class="px-6 py-2 border rounded hover:bg-gray-50">
+                <?= $escaper->escapeHtml(__('Back')) ?>
+            </button>
+            <div x-show="step === 0"></div>
+
+            <button type="button"
+                    x-show="step < 3"
+                    @click="nextStep()"
+                    class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                <?= $escaper->escapeHtml(__('Next')) ?>
+            </button>
+
+            <button type="submit"
+                    x-show="step === 3"
+                    :disabled="submitting"
+                    class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50">
+                <span x-show="!submitting"><?= $escaper->escapeHtml(__('Submit Registration')) ?></span>
+                <span x-show="submitting"><?= $escaper->escapeHtml(__('Submitting...')) ?></span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function companyRegistration() {
+        return {
+            step: 0,
+            steps: ['<?= $escaper->escapeJs(__('Company')) ?>', '<?= $escaper->escapeJs(__('Address')) ?>', '<?= $escaper->escapeJs(__('Account')) ?>', '<?= $escaper->escapeJs(__('Review')) ?>'],
+            submitting: false,
+            regions: <?= /* @noEscape */ $viewModel->getRegionsJson() ?>,
+            availableRegions: [],
+            formData: {
+                company_name: '',
+                company_email: '',
+                legal_name: '',
+                vat_tax_id: '',
+                phone: '',
+                website: '',
+                street_line1: '',
+                street_line2: '',
+                city: '',
+                postcode: '',
+                country_id: '',
+                region: '',
+                region_id: '',
+                admin_firstname: '',
+                admin_lastname: '',
+                admin_email: '',
+                admin_password: '',
+                admin_password_confirm: ''
+            },
+
+            nextStep() {
+                if (this.validateStep()) {
+                    this.step++;
+                }
+            },
+
+            validateStep() {
+                if (this.step === 0) {
+                    return this.formData.company_name && this.formData.company_email;
+                }
+                if (this.step === 1) {
+                    return this.formData.street_line1 && this.formData.city && this.formData.postcode && this.formData.country_id;
+                }
+                if (this.step === 2) {
+                    return this.formData.admin_firstname && this.formData.admin_lastname &&
+                           this.formData.admin_email && this.formData.admin_password &&
+                           this.formData.admin_password === this.formData.admin_password_confirm &&
+                           this.formData.admin_password.length >= 8;
+                }
+                return true;
+            },
+
+            updateRegions() {
+                this.availableRegions = this.regions[this.formData.country_id] || [];
+                this.formData.region_id = '';
+                this.formData.region = '';
+            },
+
+            submitForm(event) {
+                if (!this.validateStep()) {
+                    event.preventDefault();
+                    return;
+                }
+                this.submitting = true;
+            }
+        }
+    }
+</script>

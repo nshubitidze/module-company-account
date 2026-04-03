@@ -1,0 +1,30 @@
+<!--@subject Company Registration Update @-->
+<!--@vars
+{"var company_name":"Company Name","var admin_name":"Admin Name","var reject_reason":"Rejection Reason"}
+@-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "Dear %name," name=$admin_name}}</p>
+            <p>
+                {{trans "We have reviewed your registration for <strong>%company_name</strong>." company_name=$company_name}}
+            </p>
+            <p>
+                {{trans "Unfortunately, we are unable to approve your company registration at this time."}}
+            </p>
+            {{depend reject_reason}}
+            <p>
+                <strong>{{trans "Reason:"}}</strong> {{var reject_reason}}
+            </p>
+            {{/depend}}
+            <p>
+                {{trans "If you believe this was made in error or would like to provide additional information, please contact our support team."}}
+            </p>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}
