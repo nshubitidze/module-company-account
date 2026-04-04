@@ -1,0 +1,57 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Shubo\CompanyAccount\ViewModel\CompanyUsers $viewModel */
+/** @var \Magento\Framework\Escaper $escaper */
+$viewModel = $block->getData('view_model');
+$teams = $viewModel->getTeams();
+?>
+
+<div class="container mx-auto px-4 py-6" x-data="{ showTeamModal: false }">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold"><?= $escaper->escapeHtml(__('Company Teams')) ?></h1>
+        <button @click="showTeamModal = true"
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+            <?= $escaper->escapeHtml(__('Create Team')) ?>
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <?php foreach ($teams as $team): ?>
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-semibold"><?= $escaper->escapeHtml($team->getName()) ?></h3>
+            <?php if ($team->getDescription()): ?>
+                <p class="text-sm text-gray-500 mt-1"><?= $escaper->escapeHtml($team->getDescription()) ?></p>
+            <?php endif; ?>
+            <div class="mt-3">
+                <a href="<?= $escaper->escapeUrl($block->getUrl('company/account/teams_delete', ['team_id' => $team->getTeamId()])) ?>"
+                   class="text-red-600 text-sm hover:underline"
+                   onclick="return confirm('<?= $escaper->escapeJs(__('Delete this team?')) ?>')">
+                    <?= $escaper->escapeHtml(__('Delete')) ?>
+                </a>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+
+    <?php if (empty($teams)): ?>
+    <p class="text-gray-500 text-center py-8"><?= $escaper->escapeHtml(__('No teams created yet.')) ?></p>
+    <?php endif; ?>
+
+    <!-- Create Team Modal -->
+    <div x-show="showTeamModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md" @click.away="showTeamModal = false">
+            <h2 class="text-lg font-semibold mb-4"><?= $escaper->escapeHtml(__('Create Team')) ?></h2>
+            <form action="<?= $escaper->escapeUrl($block->getUrl('company/account/teams_save')) ?>" method="post">
+                <?= $block->getBlockHtml('formkey') ?>
+                <div class="space-y-3">
+                    <input type="text" name="name" required placeholder="<?= $escaper->escapeHtmlAttr(__('Team Name')) ?>" class="border rounded px-3 py-2 w-full">
+                    <textarea name="description" placeholder="<?= $escaper->escapeHtmlAttr(__('Description (optional)')) ?>" class="border rounded px-3 py-2 w-full" rows="2"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 mt-4">
+                    <button type="button" @click="showTeamModal = false" class="px-4 py-2 border rounded"><?= $escaper->escapeHtml(__('Cancel')) ?></button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"><?= $escaper->escapeHtml(__('Save Team')) ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Shubo\CompanyAccount\ViewModel\CompanyUsers $viewModel */
+/** @var \Magento\Framework\Escaper $escaper */
+$viewModel = $block->getData('view_model');
+$users = $viewModel->getUsers();
+$roles = $viewModel->getRoles();
+$teams = $viewModel->getTeams();
+?>
+
+<div class="container mx-auto px-4 py-6" x-data="{ showInviteModal: false }">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold"><?= $escaper->escapeHtml(__('Company Users')) ?></h1>
+        <button @click="showInviteModal = true"
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+            <?= $escaper->escapeHtml(__('Invite User')) ?>
+        </button>
+    </div>
+
+    <!-- Users Table -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500"><?= $escaper->escapeHtml(__('Name')) ?></th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500"><?= $escaper->escapeHtml(__('Email')) ?></th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500"><?= $escaper->escapeHtml(__('Job Title')) ?></th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500"><?= $escaper->escapeHtml(__('Status')) ?></th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-500"><?= $escaper->escapeHtml(__('Actions')) ?></th>
+                </tr>
+            </thead>
+            <tbody class="divide-y">
+                <?php foreach ($users as $user): ?>
+                <tr>
+                    <td class="px-4 py-3">
+                        <?= $escaper->escapeHtml($user['firstname'] . ' ' . $user['lastname']) ?>
+                        <?php if ($user['is_admin']): ?>
+                            <span class="ml-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded"><?= $escaper->escapeHtml(__('Admin')) ?></span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="px-4 py-3 text-sm"><?= $escaper->escapeHtml($user['email']) ?></td>
+                    <td class="px-4 py-3 text-sm"><?= $escaper->escapeHtml($user['job_title'] ?? '-') ?></td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-0.5 rounded text-xs <?= $user['status'] ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' ?>">
+                            <?= $user['status'] ? $escaper->escapeHtml(__('Active')) : $escaper->escapeHtml(__('Inactive')) ?>
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <?php if (!$user['is_admin']): ?>
+                        <a href="<?= $escaper->escapeUrl($block->getUrl('company/account/users_delete', ['user_id' => $user['user_id']])) ?>"
+                           class="text-red-600 text-sm hover:underline"
+                           onclick="return confirm('<?= $escaper->escapeJs(__('Remove this user?')) ?>')">
+                            <?= $escaper->escapeHtml(__('Remove')) ?>
+                        </a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                <?php if (empty($users)): ?>
+                <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500"><?= $escaper->escapeHtml(__('No users yet.')) ?></td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Invite Modal -->
+    <div x-show="showInviteModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md" @click.away="showInviteModal = false">
+            <h2 class="text-lg font-semibold mb-4"><?= $escaper->escapeHtml(__('Invite User')) ?></h2>
+            <form action="<?= $escaper->escapeUrl($block->getUrl('company/account/users_addPost')) ?>" method="post">
+                <?= $block->getBlockHtml('formkey') ?>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" name="firstname" required placeholder="<?= $escaper->escapeHtmlAttr(__('First Name')) ?>" class="border rounded px-3 py-2 w-full">
+                        <input type="text" name="lastname" required placeholder="<?= $escaper->escapeHtmlAttr(__('Last Name')) ?>" class="border rounded px-3 py-2 w-full">
+                    </div>
+                    <input type="email" name="email" required placeholder="<?= $escaper->escapeHtmlAttr(__('Email')) ?>" class="border rounded px-3 py-2 w-full">
+                    <input type="text" name="job_title" placeholder="<?= $escaper->escapeHtmlAttr(__('Job Title (optional)')) ?>" class="border rounded px-3 py-2 w-full">
+                    <select name="role_id" class="border rounded px-3 py-2 w-full">
+                        <option value=""><?= $escaper->escapeHtml(__('Select Role (optional)')) ?></option>
+                        <?php foreach ($roles as $role): ?>
+                        <option value="<?= (int) $role->getRoleId() ?>"><?= $escaper->escapeHtml($role->getRoleName()) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-3 mt-4">
+                    <button type="button" @click="showInviteModal = false" class="px-4 py-2 border rounded"><?= $escaper->escapeHtml(__('Cancel')) ?></button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"><?= $escaper->escapeHtml(__('Send Invitation')) ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

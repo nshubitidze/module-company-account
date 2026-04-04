@@ -1,0 +1,94 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Shubo\CompanyAccount\ViewModel\CompanyProfile $viewModel */
+/** @var \Magento\Framework\Escaper $escaper */
+$viewModel = $block->getData('view_model');
+$company = $viewModel->getCompany();
+?>
+
+<?php if ($company): ?>
+<div class="container mx-auto px-4 py-6" x-data="{ editing: false }">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold"><?= $escaper->escapeHtml(__('Company Profile')) ?></h1>
+        <button @click="editing = !editing" class="px-4 py-2 border rounded text-sm hover:bg-gray-50">
+            <span x-show="!editing"><?= $escaper->escapeHtml(__('Edit')) ?></span>
+            <span x-show="editing"><?= $escaper->escapeHtml(__('Cancel')) ?></span>
+        </button>
+    </div>
+
+    <!-- View Mode -->
+    <div x-show="!editing" class="bg-white rounded-lg shadow p-6 space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-gray-500"><?= $escaper->escapeHtml(__('Company Name')) ?></p>
+                <p class="font-medium"><?= $escaper->escapeHtml($company->getCompanyName()) ?></p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500"><?= $escaper->escapeHtml(__('Legal Name')) ?></p>
+                <p class="font-medium"><?= $escaper->escapeHtml($company->getLegalName() ?: '-') ?></p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500"><?= $escaper->escapeHtml(__('Email')) ?></p>
+                <p class="font-medium"><?= $escaper->escapeHtml($company->getCompanyEmail()) ?></p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500"><?= $escaper->escapeHtml(__('Phone')) ?></p>
+                <p class="font-medium"><?= $escaper->escapeHtml($company->getPhone() ?: '-') ?></p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500"><?= $escaper->escapeHtml(__('VAT/Tax ID')) ?></p>
+                <p class="font-medium"><?= $escaper->escapeHtml($company->getVatTaxId() ?: '-') ?></p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500"><?= $escaper->escapeHtml(__('Website')) ?></p>
+                <p class="font-medium"><?= $escaper->escapeHtml($company->getWebsite() ?: '-') ?></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Mode -->
+    <div x-show="editing" x-cloak>
+        <form action="<?= $escaper->escapeUrl($block->getUrl('company/account/profile_save')) ?>" method="post"
+              class="bg-white rounded-lg shadow p-6">
+            <?= $block->getBlockHtml('formkey') ?>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1"><?= $escaper->escapeHtml(__('Company Name')) ?> *</label>
+                    <input type="text" name="company_name" required
+                           value="<?= $escaper->escapeHtmlAttr($company->getCompanyName()) ?>"
+                           class="border rounded px-3 py-2 w-full">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1"><?= $escaper->escapeHtml(__('Legal Name')) ?></label>
+                    <input type="text" name="legal_name"
+                           value="<?= $escaper->escapeHtmlAttr($company->getLegalName() ?? '') ?>"
+                           class="border rounded px-3 py-2 w-full">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1"><?= $escaper->escapeHtml(__('VAT/Tax ID')) ?></label>
+                    <input type="text" name="vat_tax_id"
+                           value="<?= $escaper->escapeHtmlAttr($company->getVatTaxId() ?? '') ?>"
+                           class="border rounded px-3 py-2 w-full">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1"><?= $escaper->escapeHtml(__('Phone')) ?></label>
+                    <input type="text" name="phone"
+                           value="<?= $escaper->escapeHtmlAttr($company->getPhone() ?? '') ?>"
+                           class="border rounded px-3 py-2 w-full">
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium mb-1"><?= $escaper->escapeHtml(__('Website')) ?></label>
+                    <input type="url" name="website"
+                           value="<?= $escaper->escapeHtmlAttr($company->getWebsite() ?? '') ?>"
+                           class="border rounded px-3 py-2 w-full">
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    <?= $escaper->escapeHtml(__('Save Changes')) ?>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<?php endif; ?>
