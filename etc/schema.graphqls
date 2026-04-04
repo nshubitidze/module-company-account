@@ -1,0 +1,162 @@
+type Query {
+    shuboCompany: ShuboCompany @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\Company") @cache(cacheable: false)
+    shuboCompanyUsers(
+        pageSize: Int = 20
+        currentPage: Int = 1
+    ): ShuboCompanyUserList @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\CompanyUsers") @cache(cacheable: false)
+    shuboCompanyRoles: [ShuboCompanyRole] @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\CompanyRoles") @cache(cacheable: false)
+    shuboCompanyTeams: [ShuboCompanyTeam] @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\CompanyTeams") @cache(cacheable: false)
+    shuboMyPermissions: [String] @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\MyPermissions") @cache(cacheable: false)
+}
+
+type Mutation {
+    shuboRegisterCompany(input: ShuboCompanyRegistrationInput!): ShuboCompanyRegistrationOutput
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\RegisterCompany")
+    shuboUpdateCompanyProfile(input: ShuboCompanyProfileInput!): ShuboCompany
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\UpdateCompanyProfile")
+    shuboInviteCompanyUser(input: ShuboInviteUserInput!): ShuboCompanyUser
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\InviteUser")
+    shuboUpdateCompanyUser(input: ShuboUpdateUserInput!): ShuboCompanyUser
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\UpdateUser")
+    shuboRemoveCompanyUser(userId: Int!): Boolean
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\RemoveUser")
+    shuboSaveCompanyRole(input: ShuboRoleInput!): ShuboCompanyRole
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\SaveRole")
+    shuboDeleteCompanyRole(roleId: Int!): Boolean
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\DeleteRole")
+    shuboSaveCompanyTeam(input: ShuboTeamInput!): ShuboCompanyTeam
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\SaveTeam")
+    shuboDeleteCompanyTeam(teamId: Int!): Boolean
+        @resolver(class: "Shubo\\CompanyAccount\\Model\\Resolver\\DeleteTeam")
+}
+
+type ShuboCompany {
+    entity_id: Int
+    company_name: String
+    legal_name: String
+    company_email: String
+    vat_tax_id: String
+    reseller_id: String
+    phone: String
+    website: String
+    status: Int
+    status_label: String
+    addresses: [ShuboCompanyAddress]
+    admin: ShuboCompanyUser
+    user_count: Int
+}
+
+type ShuboCompanyAddress {
+    address_id: Int
+    type: String
+    street_line1: String
+    street_line2: String
+    city: String
+    region: String
+    postcode: String
+    country_id: String
+    telephone: String
+    is_default: Boolean
+}
+
+type ShuboCompanyUser {
+    user_id: Int
+    customer_id: Int
+    firstname: String
+    lastname: String
+    email: String
+    job_title: String
+    phone: String
+    role: ShuboCompanyRole
+    team: ShuboCompanyTeam
+    status: Int
+    is_company_admin: Boolean
+}
+
+type ShuboCompanyUserList {
+    items: [ShuboCompanyUser]
+    total_count: Int
+    page_info: SearchResultPageInfo
+}
+
+type ShuboCompanyRole {
+    role_id: Int
+    role_name: String
+    description: String
+    is_default: Boolean
+    permissions: [String]
+    user_count: Int
+}
+
+type ShuboCompanyTeam {
+    team_id: Int
+    name: String
+    description: String
+    parent_team_id: Int
+    children: [ShuboCompanyTeam]
+    user_count: Int
+}
+
+input ShuboCompanyRegistrationInput {
+    company_name: String!
+    company_email: String!
+    legal_name: String
+    vat_tax_id: String
+    phone: String
+    website: String
+    admin_firstname: String!
+    admin_lastname: String!
+    admin_email: String!
+    admin_password: String!
+    street_line1: String!
+    street_line2: String
+    city: String!
+    region: String
+    region_id: Int
+    postcode: String!
+    country_id: String!
+}
+
+type ShuboCompanyRegistrationOutput {
+    company: ShuboCompany
+    message: String
+}
+
+input ShuboCompanyProfileInput {
+    company_name: String
+    legal_name: String
+    vat_tax_id: String
+    phone: String
+    website: String
+}
+
+input ShuboInviteUserInput {
+    email: String!
+    firstname: String!
+    lastname: String!
+    role_id: Int
+    team_id: Int
+    job_title: String
+}
+
+input ShuboUpdateUserInput {
+    user_id: Int!
+    role_id: Int
+    team_id: Int
+    job_title: String
+    status: Int
+}
+
+input ShuboRoleInput {
+    role_id: Int
+    role_name: String!
+    description: String
+    permissions: [String!]!
+}
+
+input ShuboTeamInput {
+    team_id: Int
+    name: String!
+    description: String
+    parent_team_id: Int
+}
