@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
+
+    <!-- Invalidate customer section data when company-related POST actions happen -->
+    <action name="company/account/registerPost">
+        <section name="customer"/>
+    </action>
+    <action name="company/account/users/addPost">
+        <section name="customer"/>
+    </action>
+
+</config>
