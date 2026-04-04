@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <event name="customer_login">
+        <observer name="shubo_company_customer_login"
+                  instance="Shubo\CompanyAccount\Observer\CustomerLoginObserver"/>
+    </event>
+
+    <event name="shubo_company_status_change">
+        <observer name="shubo_company_status_change_email"
+                  instance="Shubo\CompanyAccount\Observer\CompanyStatusChangeObserver"/>
+    </event>
+
+</config>

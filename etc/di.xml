@@ -32,4 +32,17 @@
     <preference for="Shubo\CompanyAccount\Api\CompanyManagementInterface"
                 type="Shubo\CompanyAccount\Model\CompanyManagement"/>
 
+    <!-- Plugins -->
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="shubo_company_customer_data"
+                type="Shubo\CompanyAccount\Plugin\Customer\AddCompanyDataToCustomerPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="shubo_company_order_data"
+                type="Shubo\CompanyAccount\Plugin\Checkout\AddCompanyInfoToOrderPlugin"
+                sortOrder="10"/>
+    </type>
+
 </config>

@@ -1,0 +1,139 @@
+{
+    "shubo_company": {
+        "column": {
+            "entity_id": true,
+            "company_name": true,
+            "legal_name": true,
+            "company_email": true,
+            "vat_tax_id": true,
+            "reseller_id": true,
+            "phone": true,
+            "website": true,
+            "comment": true,
+            "status": true,
+            "reject_reason": true,
+            "admin_customer_id": true,
+            "sales_representative_id": true,
+            "parent_id": true,
+            "store_id": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SHUBO_COMPANY_ADMIN_CUSTOMER": true,
+            "SHUBO_COMPANY_PARENT": true,
+            "SHUBO_COMPANY_STORE": true,
+            "SHUBO_COMPANY_EMAIL_UNIQUE": true
+        },
+        "index": {
+            "SHUBO_COMPANY_STATUS": true,
+            "SHUBO_COMPANY_ADMIN_CUSTOMER": true,
+            "SHUBO_COMPANY_NAME": true
+        }
+    },
+    "shubo_company_address": {
+        "column": {
+            "address_id": true,
+            "company_id": true,
+            "type": true,
+            "street_line1": true,
+            "street_line2": true,
+            "city": true,
+            "region": true,
+            "region_id": true,
+            "postcode": true,
+            "country_id": true,
+            "telephone": true,
+            "is_default": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SHUBO_COMPANY_ADDR_COMPANY": true
+        },
+        "index": {
+            "SHUBO_COMPANY_ADDR_COMPANY_ID": true
+        }
+    },
+    "shubo_company_team": {
+        "column": {
+            "team_id": true,
+            "company_id": true,
+            "name": true,
+            "description": true,
+            "parent_team_id": true,
+            "sort_order": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SHUBO_TEAM_COMPANY": true,
+            "SHUBO_TEAM_PARENT": true
+        },
+        "index": {
+            "SHUBO_TEAM_COMPANY_ID": true
+        }
+    },
+    "shubo_company_role": {
+        "column": {
+            "role_id": true,
+            "company_id": true,
+            "role_name": true,
+            "description": true,
+            "is_default": true,
+            "sort_order": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SHUBO_ROLE_COMPANY": true
+        },
+        "index": {
+            "SHUBO_ROLE_COMPANY_ID": true
+        }
+    },
+    "shubo_company_role_permission": {
+        "column": {
+            "permission_id": true,
+            "role_id": true,
+            "resource_id": true,
+            "is_allowed": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SHUBO_ROLE_PERM_ROLE": true,
+            "SHUBO_ROLE_PERM_UNIQUE": true
+        },
+        "index": {
+            "SHUBO_ROLE_PERM_ROLE_ID": true
+        }
+    },
+    "shubo_company_user": {
+        "column": {
+            "user_id": true,
+            "company_id": true,
+            "customer_id": true,
+            "role_id": true,
+            "team_id": true,
+            "job_title": true,
+            "phone": true,
+            "status": true,
+            "is_company_admin": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SHUBO_COMP_USER_COMPANY": true,
+            "SHUBO_COMP_USER_CUSTOMER": true,
+            "SHUBO_COMP_USER_ROLE": true,
+            "SHUBO_COMP_USER_TEAM": true,
+            "SHUBO_COMP_USER_CUSTOMER_UNIQUE": true
+        },
+        "index": {
+            "SHUBO_COMP_USER_COMPANY_ID": true,
+            "SHUBO_COMP_USER_ROLE_ID": true,
+            "SHUBO_COMP_USER_TEAM_ID": true
+        }
+    }
+}

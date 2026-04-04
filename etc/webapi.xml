@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <!-- Company CRUD -->
+    <route url="/V1/shubo/company/:companyId" method="GET">
+        <service class="Shubo\CompanyAccount\Api\CompanyRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/company" method="POST">
+        <service class="Shubo\CompanyAccount\Api\CompanyRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/company/:companyId" method="DELETE">
+        <service class="Shubo\CompanyAccount\Api\CompanyRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_delete"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/companies" method="GET">
+        <service class="Shubo\CompanyAccount\Api\CompanyRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <!-- Company Management -->
+    <route url="/V1/shubo/company/register" method="POST">
+        <service class="Shubo\CompanyAccount\Api\CompanyManagementInterface" method="register"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/company/:companyId/approve" method="POST">
+        <service class="Shubo\CompanyAccount\Api\CompanyManagementInterface" method="approve"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_approve"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/company/:companyId/reject" method="POST">
+        <service class="Shubo\CompanyAccount\Api\CompanyManagementInterface" method="reject"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_approve"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/company/:companyId/invite" method="POST">
+        <service class="Shubo\CompanyAccount\Api\CompanyManagementInterface" method="inviteUser"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <!-- Customer-facing: get my company -->
+    <route url="/V1/shubo/company/mine" method="GET">
+        <service class="Shubo\CompanyAccount\Api\CompanyManagementInterface" method="getCompanyByCustomerId"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
+
+    <!-- Company Users -->
+    <route url="/V1/shubo/company-user/:userId" method="GET">
+        <service class="Shubo\CompanyAccount\Api\CompanyUserRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/company-user" method="POST">
+        <service class="Shubo\CompanyAccount\Api\CompanyUserRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <!-- Company Roles -->
+    <route url="/V1/shubo/company-role/:roleId" method="GET">
+        <service class="Shubo\CompanyAccount\Api\CompanyRoleRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/company-role" method="POST">
+        <service class="Shubo\CompanyAccount\Api\CompanyRoleRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <!-- Company Teams -->
+    <route url="/V1/shubo/company-team/:teamId" method="GET">
+        <service class="Shubo\CompanyAccount\Api\CompanyTeamRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+    <route url="/V1/shubo/company-team" method="POST">
+        <service class="Shubo\CompanyAccount\Api\CompanyTeamRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Shubo_CompanyAccount::company_manage"/>
+        </resources>
+    </route>
+
+</routes>
